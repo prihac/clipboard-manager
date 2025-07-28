@@ -1,13 +1,16 @@
-# main.py
 import tkinter as tk
 from tkinter import simpledialog
 import pyperclip
 
-from db import connect_db, add_text, get_all_texts, delete_text, update_text
+from db import (
+    connect_db, add_text, get_all_texts,
+    delete_text, update_text
+)
 from ui import create_main_window, create_frame, create_add_button
 from features.delete_feature import handle_delete
 from features.search_feature import setup_search_ui
 from features.edit_feature import handle_edit
+from features.categories_feature import setup_categories_ui, assign_category_ui  # ⬅️ new
 
 conn, cursor = connect_db()
 root = create_main_window()
@@ -16,10 +19,12 @@ frame = create_frame(root)
 def copy_text(text):
     pyperclip.copy(text)
 
-def refresh_list():
+def refresh_list(texts=None):
     for widget in frame.winfo_children():
         widget.destroy()
-    texts = get_all_texts(cursor)
+    if texts is None:
+        texts = get_all_texts(cursor)
+
     for text_id, text in texts:
         item_frame = tk.Frame(frame)
         item_frame.pack(fill="x", pady=2)
@@ -32,6 +37,14 @@ def refresh_list():
 
         btn_delete = tk.Button(item_frame, text="🗑", command=lambda i=text_id: delete_text_and_refresh(i), width=3)
         btn_delete.pack(side="right", padx=5)
+
+        # دکمه دسته‌بندی
+        btn_cat = tk.Button(item_frame, text="📂", width=3)
+        btn_cat.pack(side="right", padx=5)
+
+        menu = assign_category_ui(root, text_id, cursor, conn, refresh_list)
+        if menu:
+            btn_cat.bind("<Button-1>", lambda e, m=menu: m.tk_popup(e.x_root, e.y_root))
 
 def delete_text_and_refresh(text_id):
     delete_text(cursor, conn, text_id)
@@ -51,5 +64,6 @@ def handle_add():
 
 create_add_button(root, handle_add)
 setup_search_ui(root, frame)
+setup_categories_ui(root, refresh_list)  # ⬅️ new
 refresh_list()
 root.mainloop()
