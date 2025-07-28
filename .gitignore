@@ -1,3 +1,16 @@
+# Ignore Python cache
 __pycache__/
 **/__pycache__/
-texts.db
+*.py[cod]
+*.pyo
+
+# Ignore SQLite DBs
+*.db
+*.sqlite3
+
+# VS Code settings
+.vscode/
+
+# OS generated files
+.DS_Store
+Thumbs.db
