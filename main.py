@@ -11,6 +11,7 @@ from features.delete_feature import handle_delete
 from features.search_feature import setup_search_ui
 from features.edit_feature import handle_edit
 from features.categories_feature import setup_categories_ui, assign_category_ui  # ⬅️ new
+from features.autoclose_feature import setup_autoclose_ui, should_autoclose
 
 conn, cursor = connect_db()
 root = create_main_window()
@@ -18,6 +19,9 @@ frame = create_frame(root)
 
 def copy_text(text):
     pyperclip.copy(text)
+    if should_autoclose():
+        root.destroy()
+
 
 def refresh_list(texts=None):
     for widget in frame.winfo_children():
@@ -63,6 +67,7 @@ def handle_add():
         refresh_list()
 
 create_add_button(root, handle_add)
+setup_autoclose_ui(root)
 setup_search_ui(root, frame)
 setup_categories_ui(root, refresh_list)  # ⬅️ new
 refresh_list()
