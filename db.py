@@ -28,9 +28,13 @@ def delete_text(cursor, conn, text_id):
     conn.commit()
 
 def search_texts(query):
-    conn = sqlite3.connect("texts.db")
+    conn = sqlite3.connect(DB_NAME)
     cursor = conn.cursor()
     cursor.execute("SELECT id, content FROM texts WHERE content LIKE ?", ('%' + query + '%',))
     results = cursor.fetchall()
     conn.close()
     return results
+
+def update_text(cursor, conn, text_id, new_content):
+    cursor.execute("UPDATE texts SET content = ? WHERE id = ?", (new_content, text_id))
+    conn.commit()

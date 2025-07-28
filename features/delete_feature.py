@@ -1,8 +1,9 @@
 # features/delete_feature.py
-import tkinter as tk
 from db import delete_text
 
 def add_delete_buttons(parent, text_id, text, cursor, conn, refresh_callback, copy_callback):
+    import tkinter as tk
+
     item_frame = tk.Frame(parent)
     item_frame.pack(fill="x", pady=2)
 
