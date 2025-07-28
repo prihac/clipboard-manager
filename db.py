@@ -26,3 +26,11 @@ def get_all_texts(cursor):
 def delete_text(cursor, conn, text_id):
     cursor.execute("DELETE FROM texts WHERE id=?", (text_id,))
     conn.commit()
+
+def search_texts(query):
+    conn = sqlite3.connect("texts.db")
+    cursor = conn.cursor()
+    cursor.execute("SELECT id, content FROM texts WHERE content LIKE ?", ('%' + query + '%',))
+    results = cursor.fetchall()
+    conn.close()
+    return results

@@ -6,6 +6,7 @@ import pyperclip
 from db import connect_db, add_text, get_all_texts
 from ui import create_main_window, create_frame, create_add_button
 from features.delete_feature import add_delete_buttons  # We'll write this next
+from features.search_feature import setup_search_ui
 
 conn, cursor = connect_db()
 root = create_main_window()
@@ -28,5 +29,6 @@ def handle_add():
         refresh_list()
 
 create_add_button(root, handle_add)
+setup_search_ui(root, frame)
 refresh_list()
 root.mainloop()
