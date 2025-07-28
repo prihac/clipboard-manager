@@ -1,17 +1,15 @@
 # features/autoclose_feature.py
-
 import tkinter as tk
 
-# Auto-close setting status
-autoclose_enabled = tk.BooleanVar(value=False)
-
 def setup_autoclose_ui(root):
-    checkbox = tk.Checkbutton(
-        root,
-        text="Close after copy",
-        variable=autoclose_enabled
-    )
-    checkbox.pack(anchor="w", padx=10, pady=5)
+    autoclose_enabled = tk.BooleanVar(root, value=False)
+    frame = tk.Frame(root)
+    frame.pack(fill="x", pady=5)
 
-def should_autoclose():
-    return autoclose_enabled.get()
+    checkbox = tk.Checkbutton(frame, text="Auto-close after copy", variable=autoclose_enabled)
+    checkbox.pack(side="left", padx=5)
+
+    return autoclose_enabled
+
+def should_autoclose(autoclose_var):
+    return autoclose_var.get()

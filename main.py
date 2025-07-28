@@ -1,3 +1,4 @@
+# main.py
 import tkinter as tk
 from tkinter import simpledialog
 import pyperclip
@@ -10,18 +11,19 @@ from ui import create_main_window, create_frame, create_add_button
 from features.delete_feature import handle_delete
 from features.search_feature import setup_search_ui
 from features.edit_feature import handle_edit
-from features.categories_feature import setup_categories_ui, assign_category_ui  # ⬅️ new
+from features.categories_feature import setup_categories_ui, assign_category_ui
 from features.autoclose_feature import setup_autoclose_ui, should_autoclose
 
 conn, cursor = connect_db()
 root = create_main_window()
 frame = create_frame(root)
 
+autoclose_enabled = setup_autoclose_ui(root)
+
 def copy_text(text):
     pyperclip.copy(text)
-    if should_autoclose():
+    if should_autoclose(autoclose_enabled):
         root.destroy()
-
 
 def refresh_list(texts=None):
     for widget in frame.winfo_children():
@@ -42,7 +44,6 @@ def refresh_list(texts=None):
         btn_delete = tk.Button(item_frame, text="🗑", command=lambda i=text_id: delete_text_and_refresh(i), width=3)
         btn_delete.pack(side="right", padx=5)
 
-        # دکمه دسته‌بندی
         btn_cat = tk.Button(item_frame, text="📂", width=3)
         btn_cat.pack(side="right", padx=5)
 
@@ -67,8 +68,7 @@ def handle_add():
         refresh_list()
 
 create_add_button(root, handle_add)
-setup_autoclose_ui(root)
 setup_search_ui(root, frame)
-setup_categories_ui(root, refresh_list)  # ⬅️ new
+setup_categories_ui(root, refresh_list)
 refresh_list()
 root.mainloop()
