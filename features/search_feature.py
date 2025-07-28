@@ -1,5 +1,4 @@
 # features/search_feature.py
-
 from db import search_texts
 from ui import display_texts
 
@@ -16,10 +15,10 @@ def setup_search_ui(root, display_frame):
         if query.strip():
             results = search_texts(query)
         else:
-            results = search_texts("")  # Show all
+            results = search_texts("")  # Show all texts if query empty
         display_texts(display_frame, results)
 
     search_var.trace_add("write", update_display)
 
-   # Initial display of all texts
+    # Initial display
     display_texts(display_frame, search_texts(""))
